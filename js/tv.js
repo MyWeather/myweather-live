@@ -59,6 +59,11 @@ function updateWeatherUI(lat, lng) {
         });
 
         $("#10-DAY-FORECAST").html(days.join( "" ))
+
+				// FADE IN 10 DAY FORCAST AS A STAGGER
+				$('.forecast-day').velocity("fadeIn", {
+					stagger: 250
+				})
     });
 
     $.getJSON("http://api.myweather.today/v1/forecast/" + lat + "/" + lng, function( data ) {
