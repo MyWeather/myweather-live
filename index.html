@@ -1,0 +1,88 @@
+<html>
+    <head>
+        <title>MyWeather Live</title>
+
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/weather-icons.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script type="text/javascript" src="js/tv.js"></script>
+    </head>
+    <body style="background-image: url('https://s3.amazonaws.com/mywxtoday/assets/img/bkg/nt-clear.jpg')">
+        <section class="head">
+            <div class="location_title">
+                <div id="LOCATION" class="head_text">
+                    
+                </div>
+                <div id="CURRENT_TIME" class="time pull-right">
+                    11:37 PM EST
+                </div>
+            </div>
+        </section>
+        
+        <section class="sidebar">
+            <div class="clear"></div>
+            <div class="forecast_temperature_holder">
+                <div id="CURRENT_FORECAST_ICON" class="forecast_temperature">
+                    
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="temp_section">
+                <span id="CURRENT_TEMP" class="temp"></span>
+                <span id="CURRENT_FEELS_LIKE_TEMP" class="feels_like"></span>
+            </div>
+            <div class="weather_stats">
+                <table class="current_table">
+                    <tbody>
+                        <tr>
+                            <td>Dew Point:</td>
+                            <td id="CURRENT_DEW_POINT"></td>
+                        </tr>
+                        <tr>
+                            <td>Humidity:</td>
+                            <td id="CURRENT_HUMIDITY"></td>
+                        </tr>
+                        <tr>
+                            <td>Visibility:</td>
+                            <td id="CURRENT_VISIBILITY"></td>
+                        </tr>
+                        <tr>
+                            <td>Cloud Cover:</td>
+                            <td id="CURRENT_CLOUD_COVER"></td>
+                        </tr>
+                        <tr>
+                            <td>Pressure:</td>
+                            <td id="CURRENT_PRESSURE"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <section class="main_wrap">
+            <div class="container">
+                <div class="text-forecast-holder">
+                    <div class="panel-header">
+                        <span>The Next Couple of Days</span>
+                    </div>
+                    <div id="TEXTUAL_FORECAST" class="textual-forecast">
+                        
+                        
+                    </div>
+                </div>
+                <div class="10-day">
+                    <div class="panel-header">
+                        <span>Extended Forecast</span>
+                    </div>
+                    <div id="10-DAY-FORECAST" class="forecast-content">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="progress">
+                <div class="bar" style="width: 10%;">
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
