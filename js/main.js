@@ -1,4 +1,7 @@
 
+var bar = $('.bar');
+var shown = false;
+
 var showHolder = function() {
 	$(".sidebar").velocity("fadeIn", {
 		duration: 1000,
@@ -16,19 +19,29 @@ var showMain = function() {
 }
 
 var showWeatherSections = function() {
-	showHolder();
+    showHolder();
 }
 
 var progress = function() {
-	$('.bar').velocity({
+	bar.velocity({
 		width: ["100%", 0]
 	}, {
 		duration: 8000,
 		complete: function() {
-			$('.bar').velocity("fadeOut");
-			showWeatherSections()
+			bar.velocity("fadeOut");
+            bar.css("width", 0);
+            
+            if(!shown) {
+                showWeatherSections();
+                shown = true;
+            }
 		}
 	});
+    
+    setTimeout(function() {
+        bar.velocity("fadeIn");
+        progress()
+    }, 16000);
 }
 $(window).on('load', function() {
 	//showHolder();

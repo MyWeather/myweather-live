@@ -4,32 +4,37 @@ var placesArray = [
     ['New York, NY', '40.71,-74.00'],
     ['Chicago, IL', '41.83,-87.68'],
     ['San Francisco, CA', '37.78,-122.41'],
-    ['Erie, PA', '42.12,-80.08'],
 ];
 
 
 var x = 0;
 var loopArray = function(arr) {
     // call itself
-    setTimeout(function() {
-        var geo = arr[x][1].split(',');
-        $("#LOCATION").html(arr[x][0]);
-        updateWeatherUI(geo[0], geo[1]);
-        x++;
 
-        if(x < arr.length) {
-            loopArray(arr);   
-        } else {
-//            x = 0;
-//            loopArray(arr);
-        }
-    }, 5000);
-}
-loopArray(placesArray);
+    var geo = arr[x][1].split(',');
+    $("#LOCATION").html(arr[x][0]);
+    updateWeatherUI(geo[0], geo[1]);
+    x++;
+
+    if(x < arr.length) {
+        loopArray(arr);   
+    } else {
+        x = 0;
+        loopArray(arr);
+    }
+    
+    setTimeout(function() {
+        loopArray(arr);
+    }, 26000);
+};
+
+setTimeout(function() {
+    loopArray(placesArray);
+}, 8000);
 
 
 function updateWeatherUI(lat, lng) {
-    $.getJSON("https://api.forecast.io/forecast/53accd0614706b8b63b4897eeb3dea7a/" + lat + "," + lng + "?callback=?", function( data ) {
+    $.getJSON("http://api.myweather.today/v1/forecastIO/" + lat + "/" + lng, function( data ) {
 
         $("#CURRENT_FORECAST_ICON").html("<div class=\"icon " + getIconHolder(data['currently']['icon']) + "\"><i class=\"wi "
             + getIcon(data['currently']['icon']) + "\"></i></div>");
@@ -59,11 +64,10 @@ function updateWeatherUI(lat, lng) {
         });
 
         $("#10-DAY-FORECAST").html(days.join( "" ))
-
-				// FADE IN 10 DAY FORCAST AS A STAGGER
-				$('.forecast-day').velocity("fadeIn", {
-					stagger: 250
-				})
+            // FADE IN 10 DAY FORCAST AS A STAGGER
+            $('.forecast-day').velocity("fadeIn", {
+                stagger: 250
+            })
     });
 
     $.getJSON("http://api.myweather.today/v1/forecast/" + lat + "/" + lng, function( data ) {
