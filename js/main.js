@@ -19,7 +19,7 @@ var showMain = function() {
 }
 
 var showWeatherSections = function() {
-    showHolder();
+	showHolder();
 }
 
 var progress = function() {
@@ -29,20 +29,33 @@ var progress = function() {
 		duration: 8000,
 		complete: function() {
 			bar.velocity("fadeOut");
-            bar.css("width", 0);
-            
-            if(!shown) {
-                showWeatherSections();
-                shown = true;
-            }
+			bar.css("width", 0);
+			if(!shown) {
+				showWeatherSections();
+				shown = true;
+			}
 		}
 	});
-    
-    setTimeout(function() {
-        bar.velocity("fadeIn");
-        progress()
-    }, 16000);
 }
+
+
+// We call showProgress after 18s
+// Then call it again 26 later so were in sync with the changes
+var showProgress = function() {
+	bar.velocity("fadeIn");
+	progress();
+	setTimeout(function() {
+		showProgress();
+	}, 26000);
+}
+
+// We first set the time to 18s
+// and the progress takes 8s to show
+// giving us 26s total when we fire the next city
+setTimeout(function() {
+	showProgress();
+}, 18000);
+
 $(window).on('load', function() {
 	//showHolder();
 	setTimeout(function() {
