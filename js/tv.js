@@ -37,38 +37,40 @@ function updateWeatherUI(lat, lng) {
 	$.getJSON("http://api.myweather.today/v1/forecastIO/" + lat + "/" + lng, function( data ) {
 
 		$("#CURRENT_FORECAST_ICON").html("<div class=\"icon " + getIconHolder(data['currently']['icon']) + "\"><i class=\"wi "
-																		 + getIcon(data['currently']['icon']) + "\"></i></div>");
+            + getIcon(data['currently']['icon']) + "\"></i></div>");
 
-																		 $("#CURRENT_TEMP").html(round5(data['currently']['temperature']) + "&degF");
-																		 $("#CURRENT_FEELS_LIKE_TEMP").html("feels like " + round5(data['currently']['apparentTemperature']) + "&degF");
-																		 $("#CURRENT_DEW_POINT").html(round5(data['currently']['dewPoint']) + "&degF");
-																		 $("#CURRENT_HUMIDITY").html(Math.round(data['currently']['humidity'] * 100) + " %");
-																		 $("#CURRENT_VISIBILITY").html(data['currently']['visibility'] + " mi");
-																		 $("#CURRENT_CLOUD_COVER").html(round5(data['currently']['cloudCover'] * 100) + "%");
-																		 $("#CURRENT_PRESSURE").html(Math.round(data['currently']['pressure']) + " inHg");
+            $("#CURRENT_TEMP").html(round5(data['currently']['temperature']) + "&degF");
+            $("#CURRENT_FEELS_LIKE_TEMP").html("feels like " + round5(data['currently']['apparentTemperature']) + "&degF");
+            $("#CURRENT_DEW_POINT").html(round5(data['currently']['dewPoint']) + "&degF");
+            $("#CURRENT_HUMIDITY").html(Math.round(data['currently']['humidity'] * 100) + " %");
+            $("#CURRENT_VISIBILITY").html(data['currently']['visibility'] + " mi");
+            $("#CURRENT_CLOUD_COVER").html(round5(data['currently']['cloudCover'] * 100) + "%");
+            $("#CURRENT_PRESSURE").html(Math.round(data['currently']['pressure']) + " inHg");
 
 
-																		 var days = [];
-																		 $.each( data['daily']['data'], function(i, item ) {
-																			 days.push(
-																				 "<div class=forecast-day><h4 class=forecast-day-title>" + getDay(item.time) +
-																					 "</h4><div class=\"day-icon " + getIconHolder(item.icon) + " wi-day\"><i class=\"wi " + getIcon(item.icon)
-																				 + "\"></i></div><p>" + Math.round(item.apparentTemperatureMax) +
-																					 "&deg; <small>F</small> / " + Math.round(item.apparentTemperatureMin) +
-																					 "&deg; <small>F</small></p><p class=wind><span class=\"wi wi-windy\"></span>&nbsp;&nbsp; " +
-																					 getWindDirection(item.windBearing) + " <small> at </small>" +
-																					 Math.round(item.windSpeed) + " mph</p><p class=precip><span class=\"wi wi-sprinkles\"></span>&nbsp;&nbsp; " +
-																					 round5(Math.round(item.precipProbability * 100))  + "%</p></div></div>"
-																			 );
+            var days = [];
+            $.each( data['daily']['data'], function(i, item ) {
+             days.push(
+                 "<div class=forecast-day><h4 class=forecast-day-title>" + getDay(item.time) +
+                     "</h4><div class=\"day-icon " + getIconHolder(item.icon) + " wi-day\"><i class=\"wi " + getIcon(item.icon)
+                 + "\"></i></div><p>" + Math.round(item.apparentTemperatureMax) +
+                     "&deg; <small>F</small> / " + Math.round(item.apparentTemperatureMin) +
+                     "&deg; <small>F</small></p><p class=wind><span class=\"wi wi-windy\"></span>&nbsp;&nbsp; " +
+                     getWindDirection(item.windBearing) + " <small> at </small>" +
+                     Math.round(item.windSpeed) + " mph</p><p class=precip><span class=\"wi wi-sprinkles\"></span>&nbsp;&nbsp; " +
+                     round5(Math.round(item.precipProbability * 100))  + "%</p></div></div>"
+             );
 
-																		 });
+            });
 
-																		 $("#10-DAY-FORECAST").html(days.join( "" ))
-																		 // FADE IN 10 DAY FORCAST AS A STAGGER
-																		 $('.forecast-day').velocity("fadeIn", {
-																			 stagger: 250
-																		 })
-	});
+            $("#10-DAY-FORECAST").html(days.join( "" ))
+            // FADE IN 10 DAY FORCAST AS A STAGGER
+            $('.forecast-day').velocity("fadeIn", {
+                stagger: 250
+            })
+            
+            $("body").css("background-image","url('" + getBackgroundImage(data['currently']['icon']) + "')");
+    });
 
 	$.getJSON("http://api.myweather.today/v1/forecast/" + lat + "/" + lng, function( data ) {
 		var items = [];
@@ -184,6 +186,32 @@ function getWindDirection(windDirection) {
 	} else {
 		return "N/A";
 	}
+}
+
+function getBackgroundImage(icon) {
+    if(icon == "clear-day") {
+        return "https://s3.amazonaws.com/mywxtoday/assets/img/bkg/dt-clear.jpg";
+    } else if (icon == "clear-night") {
+        return "https://s3.amazonaws.com/mywxtoday/assets/img/bkg/nt-clear.jpg";
+    } else if (icon == "rain") {
+        return "https://s3.amazonaws.com/mywxtoday/assets/img/bkg/wet-windshield.jpg";
+    } else if (icon == "snow") {
+        return "https://s3.amazonaws.com/mywxtoday/assets/img/bkg/dt-snow.jpg";
+    } else if (icon == "sleet") {
+        return "https://s3.amazonaws.com/mywxtoday/assets/img/bkg/dt-snow.jpg";
+    } else if (icon == "wind") {
+        return "https://s3.amazonaws.com/mywxtoday/assets/img/bkg/dt-wheat-wind.jpg";
+    } else if (icon == "fog") {
+        return "https://s3.amazonaws.com/mywxtoday/assets/img/bkg/fog.jpg";
+    } else if (icon == "cloudy") {
+        return "https://s3.amazonaws.com/mywxtoday/assets/img/bkg/dt-field-clouds.jpg";
+    } else if (icon == "partly-cloudy-day") {
+        return "https://s3.amazonaws.com/mywxtoday/assets/img/bkg/ss-field.jpg";
+    } else if (icon == "partly-cloudy-night") {
+        return "https://s3.amazonaws.com/mywxtoday/assets/img/bkg/nt-clear.jpg";
+    } else {
+        return "https://s3.amazonaws.com/mywxtoday/assets/img/bkg/dt-clear.jpg";
+    }
 }
 
 function round5(x)
