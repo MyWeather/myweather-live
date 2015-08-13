@@ -1,18 +1,46 @@
 var icon;
 
 var placesArray = [
-	['New York, NY', '40.71,-74.00'],
-	['Chicago, IL', '41.83,-87.68'],
-	['San Francisco, CA', '37.78,-122.41'],
+	['New York, NY', '40.71,-74.00'], 
+    ['Chicago, IL', '41.83,-87.68'], 
+    ['Washington, DC', '38.90,-77.03'],
+    ['Los Angeles, CA', '34.05,-118.24'],
+    ['San Francisco, CA', '37.78,-122.41'], // 5
+    ['Seattle, WA', '47.60,-122.33'],
+    ['Boston, MA', '42.36,-71.05'],
+    ['Austin, TX', '30.26,-97.74'],
+    ['Charleston, WV', '38.34,-81.63'],
+    ['Nashville, TN', '36.16,-86.78'], //10
+    ['Houston, TX', '29.76,-95.36'],
+    ['Philadelphia, PA', '39.95,-75.16'],
+    ['Portland, OR', '45.52,-122.67'],
+    ['Las Vegas, NV', '36.16,-115.13'],
+    ['New Orleans, LA', '29.95,-90.07'], // 15
+    ['Honolulu, HI', '21.30,-157.85'],
+    ['San Antonio, TX', '29.42,-98.49'],
+    ['Savannah, GA', '32.08,-81.09'],
+    ['Boulder, CO', '40.01,-105.27'],
+    ['St. Louis, MI', '43.40,-84.6'], //20
+    ['Miami, FL', '25.76,-80.1'],
+    ['Atlanta, GA', '33.74,-84.38'],
+    ['San Jose, CA', '37.33,-121.88'],
+    ['Detroit, MI', '42.33,-83.04'],
+    ['Orlando, FL', '28.53,-81.37'], //25
 ];
 
+var timeArray = [
+    ['EST', '-5'],
+    ['CST', '-6'],
+    ['MST', '-7'],
+    ['PST', '-8'],
+]
 
 var x = 0;
 var updateCity = function(arr) {
-		var geo = arr[x][1].split(',');
-		$("#LOCATION").html(arr[x][0]);
-		updateWeatherUI(geo[0], geo[1]);
-		x++;
+    var geo = arr[x][1].split(',');
+    $("#LOCATION").html(arr[x][0]);
+    updateWeatherUI(geo[0], geo[1]);
+    x++;
 };
 
 var updateCityAfterTime = function() {
@@ -24,6 +52,21 @@ var updateCityAfterTime = function() {
 	}
 }
 
+var t = 0;
+var updateTime = function(arr) {
+    calcTime(arr[t][1], arr[t][0]);
+    t++;
+}
+
+var updateTimeAfterTime = function() {
+	if(t < timeArray.length) {
+		updateTime(timeArray);
+	} else {
+		t = 0;
+		updateTime(timeArray);
+	}
+}
+
 setInterval(function() {
 	updateCityAfterTime();
 }, 26000);
@@ -31,6 +74,10 @@ setInterval(function() {
 setTimeout(function() {
 	updateCity(placesArray);
 }, 10000);
+
+setTimeout(function() {
+    updateTime(timeArray);
+}, 1000);
 
 
 function updateWeatherUI(lat, lng) {
@@ -77,8 +124,8 @@ function updateWeatherUI(lat, lng) {
 		$.each( data, function(i, item ) {
 			items.push(
 				"<div class=row><div class=day>" + item.day +
-					"</div><div class=description>" + item.forecast +
-					"</div></div>"
+					"</div><div class=description><p>" + item.forecast +
+					"</p></div><div class=clear-forecast-day></div></div>"
 			);
 
 		});
@@ -219,3 +266,17 @@ function round5(x)
 	return (x % 5) >= 2.5 ? parseInt(x / 5) * 5 + 5 : parseInt(x / 5) * 5;
 }
 
+function calcTime(offset, timeZone) {
+
+    // create Date object for current location
+    var d = new Date();
+
+    // convert to msec
+    // add local time zone offset 
+    // get UTC time in msec
+    var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+    var date = new Date(utc + (3600000*offset));
+
+    // $("#CURRENT_TIME").html( + " " + timeZone);
+
+}
