@@ -6,17 +6,56 @@
 		<link rel="stylesheet" href="css/weather-icons.css">
 	</head>
 	<body style="background-image: url('https://s3.amazonaws.com/mywxtoday/assets/img/bkg/nt-clear.jpg')">
-		<header class="head">
-			<div class="location_title">
-				<div id="LOCATION" class="head_text"></div>
-				<div id="CURRENT_TIME" class="time">
-					
-				</div>
+		
+		<header>
+			<div class="left">
+				<h1 class="location_title">
+					<span class="weather-icon wi-icon-rain"><span class="wi wi-showers"></span></span><span id="LOCATION" class="head_text">City</span>
+				</h1>
 			</div>
 		</header>
 
-		<div class="application">
-			<section class="sidebar">
+		<section id="main">
+			<aside id="sidebar">
+				<div class="temperature circle">
+				    <strong id="CURRENT_TEMPERATURE"></strong>
+				</div>
+				<h1 id="CURRENT_SUMMARY"></h1>
+				<div class="weather_stats">
+					<table class="current_table">
+						<tbody>
+							<tr>
+								<td>Dew Point</td>
+								<td id="CURRENT_DEW_POINT"></td>
+							</tr>
+							<tr>
+								<td>Humidity</td>
+								<td id="CURRENT_HUMIDITY"></td>
+							</tr>
+							<tr>
+								<td>Visibility</td>
+								<td id="CURRENT_VISIBILITY"></td>
+							</tr>
+							<tr>
+								<td>Cloud Cover</td>
+								<td id="CURRENT_CLOUD_COVER"></td>
+							</tr>
+							<tr>
+								<td>Pressure</td>
+								<td id="CURRENT_PRESSURE"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</aside>
+
+			<aside id="content">
+
+			</aside>
+		</section>
+
+		<!-- <div class="application"> -->
+			<!-- <section class="sidebar">
 				<div class="clear"></div>
 				<div class="forecast_temperature_holder">
 					<div id="CURRENT_FORECAST_ICON" class="forecast_temperature">
@@ -27,8 +66,11 @@
 				<div class="temp_section">
 					<span id="CURRENT_TEMP" class="temp"></span>
 					<span id="CURRENT_FEELS_LIKE_TEMP" class="feels_like"></span>
-				</div>
-				<div class="weather_stats">
+				</div> -->
+
+				
+
+				<!-- <div class="weather_stats">
 					<table class="current_table">
 						<tbody>
 							<tr>
@@ -53,8 +95,8 @@
 							</tr>
 						</tbody>
 					</table>
-				</div>
-			</section>
+				</div> -->
+			<!-- </section>
 
 			<section class="main_wrap">
 				<div class="container">
@@ -81,11 +123,13 @@
 			<div class="progress">
 				<div class="bar"></div>
 			</div>
-		</div>
+		</div> -->
 
 
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script src="http://kottenator.github.io/jquery-circle-progress/dist/circle-progress.js"></script>
+		<script type="text/javascript" src="js/temperature_circle.js"></script>
 		<script type="text/javascript" src="js/velocity.min.js"></script>
 		<script type="text/javascript" src="js/velocity.ui.min.js"></script>
 		<script type="text/javascript" src="js/tv.js"></script>

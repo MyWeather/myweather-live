@@ -81,18 +81,20 @@ setTimeout(function() {
 
 
 function updateWeatherUI(lat, lng) {
-	$.getJSON("http://api.myweather.today/v1/forecastIO/" + lat + "/" + lng, function( data ) {
+	$.getJSON("https://api.forecast.io/forecast/80e7cbcf81c8314b610b924172cdfc23/" + lat + "," + lng, function( data ) {
 
 		$("#CURRENT_FORECAST_ICON").html("<div class=\"icon " + getIconHolder(data['currently']['icon']) + "\"><i class=\"wi "
             + getIcon(data['currently']['icon']) + "\"></i></div>");
+			console.log(data['currently']);
+			$("#CURRENT_SUMMARY").html(data['currently']['summary']);
 
-            $("#CURRENT_TEMP").html(round5(data['currently']['temperature']) + "&degF");
+            $("#CURRENT_TEMP").html(round5(data['currently']['temperature']));
             $("#CURRENT_FEELS_LIKE_TEMP").html("feels like " + round5(data['currently']['apparentTemperature']) + "&degF");
             $("#CURRENT_DEW_POINT").html(round5(data['currently']['dewPoint']) + "&degF");
             $("#CURRENT_HUMIDITY").html(Math.round(data['currently']['humidity'] * 100) + " %");
             $("#CURRENT_VISIBILITY").html(data['currently']['visibility'] + " mi");
             $("#CURRENT_CLOUD_COVER").html(round5(data['currently']['cloudCover'] * 100) + "%");
-            $("#CURRENT_PRESSURE").html(Math.round(data['currently']['pressure']) + " inHg");
+            $("#CURRENT_PRESSURE").html(Math.round((data['currently']['pressure'] * 0.0295301) * 100) / 100 + "\"");
 
 
             var days = [];
@@ -109,6 +111,8 @@ function updateWeatherUI(lat, lng) {
              );
 
             });
+
+            updateTemperature(data['currently']['temperature']);
 
             $("#10-DAY-FORECAST").html(days.join( "" ))
             // FADE IN 10 DAY FORCAST AS A STAGGER
@@ -132,6 +136,21 @@ function updateWeatherUI(lat, lng) {
 
 		$("#TEXTUAL_FORECAST").html(items.join( "" ))
 		$("<div class=clear-div></div>").appendTo( "#TEXTUAL_FORECAST" );
+	});
+}
+
+function updateTemperature(value) {
+	var value = Math.round(value * 100) / 10000;
+
+
+	$('.temperature.circle').circleProgress({
+	    arcCoef: 0.7,
+	    value: value,
+	    thickness: 12,
+	    size: 150,
+	    fill: { gradient: ['#3498db', '#3498db', '#f1c40f', '#f1c40f', '#e67e22', '#e67e22', '#e74c3c', '#e74c3c']}
+	}).on('circle-animation-progress', function(event, progress, stepValue) {
+	    $(this).find('strong').text(Math.round(parseFloat(stepValue).toFixed(2) * 100) + unescape('%B0'));
 	});
 }
 
