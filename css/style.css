@@ -101,6 +101,7 @@ h1.location_title {
 	background-color: rgba(0,0,0,0.4);
 	display:block;
 	padding-top: 25px;
+	float:left;
 
 }
 
@@ -108,6 +109,18 @@ h1.location_title {
 	font-size: 35px;
 	text-align: center;
 	margin-top: -25px;
+}
+
+.current_table {
+	margin: 145px auto;
+	width: 60%;
+	bottom: 0;
+}
+
+#map {
+	float: right;
+	width: 80%;
+	height: 625px;
 }
 
 

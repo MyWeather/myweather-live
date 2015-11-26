@@ -4,6 +4,12 @@
 
 		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="css/weather-icons.css">
+
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type="text/javascript">google.load("maps","3.9",{"other_params":"sensor=true"});</script>
+        <script type="text/javascript">google.load("visualization","1");</script>
+
+
 	</head>
 	<body style="background-image: url('https://s3.amazonaws.com/mywxtoday/assets/img/bkg/nt-clear.jpg')">
 		
@@ -25,20 +31,28 @@
 					<table class="current_table">
 						<tbody>
 							<tr>
-								<td>Dew Point</td>
-								<td id="CURRENT_DEW_POINT"></td>
+								<td>Wind</td>
+								<td id="CURRENT_WIND"></td>
 							</tr>
 							<tr>
-								<td>Humidity</td>
-								<td id="CURRENT_HUMIDITY"></td>
+								<td>Gusts</td>
+								<td id="CURRENT_GUST"></td>
+							</tr>
+							<tr>
+								<td>Feels Like</td>
+								<td id="CURRENT_FEELSLIKE"></td>
 							</tr>
 							<tr>
 								<td>Visibility</td>
 								<td id="CURRENT_VISIBILITY"></td>
 							</tr>
 							<tr>
-								<td>Cloud Cover</td>
-								<td id="CURRENT_CLOUD_COVER"></td>
+								<td>Humidity</td>
+								<td id="CURRENT_HUMIDITY"></td>
+							</tr>
+							<tr>
+								<td>Dew Point</td>
+								<td id="CURRENT_DEW_POINT"></td>
 							</tr>
 							<tr>
 								<td>Pressure</td>
@@ -50,7 +64,9 @@
 			</aside>
 
 			<aside id="content">
-
+				<div id="map">
+					
+				</div>
 			</aside>
 		</section>
 

@@ -121,6 +121,8 @@ function updateWeatherUI(lat, lng) {
             })
             
             $("body").css("background-image","url('" + getBackgroundImage(data['currently']['icon']) + "')");
+
+            initializeMap(lat, lng);
     });
 
 	$.getJSON("http://api.myweather.today/v1/forecast/" + lat + "/" + lng, function( data ) {
@@ -299,3 +301,114 @@ function calcTime(offset, timeZone) {
     // $("#CURRENT_TIME").html( + " " + timeZone);
 
 }
+
+function initializeMap(locationLat, locationLon) {
+    var myLatLng = new google.maps.LatLng(locationLat, locationLon);
+
+    var lightStyle = [{
+        "featureType": "administrative",
+        "elementType": "all",
+        "stylers": [{
+            "visibility": "simplified"
+        }]
+    }, {
+        "featureType": "administrative.country",
+        "elementType": "geometry.stroke",
+        "stylers": [{
+            "visibility": "on"
+        }]
+    }, {
+        "featureType": "administrative.province",
+        "elementType": "all",
+        "stylers": [{
+            "visibility": "on"
+        }]
+    }, {
+        "featureType": "landscape",
+        "elementType": "geometry",
+        "stylers": [{
+            "visibility": "simplified"
+        }, {
+            "color": "#fcfcfc"
+        }]
+    }, {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [{
+            "visibility": "simplified"
+        }, {
+            "color": "#fcfcfc"
+        }]
+    }, {
+        "featureType": "road.highway",
+        "elementType": "geometry",
+        "stylers": [{
+            "visibility": "simplified"
+        }, {
+            "color": "#dddddd"
+        }]
+    }, {
+        "featureType": "road.arterial",
+        "elementType": "geometry",
+        "stylers": [{
+            "visibility": "simplified"
+        }, {
+            "color": "#dddddd"
+        }]
+    }, {
+        "featureType": "road.local",
+        "elementType": "geometry",
+        "stylers": [{
+            "visibility": "simplified"
+        }, {
+            "color": "#eeeeee"
+        }]
+    }, {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [{
+            "visibility": "simplified"
+        }, {
+            "color": "#dddddd"
+        }]
+    }];
+
+    var lightStyle = new google.maps.StyledMapType(lightStyle, { name: "Light" });
+
+    var mapOptions = {
+        zoom: 7,
+        center: myLatLng,
+        disableDefaultUI: true,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+            mapTypeIds: ["light"]
+        }
+    };
+
+    
+
+    map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+    var marker = new google.maps.Marker({
+	    position: myLatLng,
+	    map: map
+	});
+
+    map.mapTypes.set("light", lightStyle);
+    map.setMapTypeId("light");
+
+    Radar.loadRadarOverlay();
+}
+
+var Radar = {
+	loadRadarOverlay: function loadRadarOverlay() {
+        var Z, ab, aa, ac, radar;
+        Z = new google.maps.LatLng(21.652538062803, -127.62037552387542);
+        ab = new google.maps.LatLng(50.406626367301044, -66.517937876818);
+        aa = new google.maps.LatLngBounds(Z, ab);
+        ac = "https://s3.amazonaws.com/mywxtoday/conus-radar/radar.png?t=" + new Date().getTime();
+        radar = new google.maps.GroundOverlay(ac, aa);
+        radar.setOpacity(0.35);
+        return radar.setMap(map);
+    }
+};
