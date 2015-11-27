@@ -1,4 +1,22 @@
 var icon;
+var weekly;
+
+$(window).on('load', initialize());
+
+function initialize() {
+	setInterval(function() {
+		updateCity(placesArray);
+		displayWeekly();
+
+
+        setTimeout(function() {
+            $("#map").velocity("fadeIn", {
+                duration: 1000,
+                stagger: 1000,
+            });
+        }, 30000);
+	}, 30000);
+}
 
 var placesArray = [
 	['New York, NY', '40.71,-74.00'], 
@@ -67,83 +85,97 @@ var updateTimeAfterTime = function() {
 	}
 }
 
-setInterval(function() {
-	updateCityAfterTime();
-}, 26000);
+function displayWeekly() {
+    setTimeout(function() {
+    	$("#map").velocity("fadeOut", {
+     		duration: 1000,
+     		stagger: 1000,
+     	}, {
+     		complete: loadWeekly(),
+     	});
+    }, 10000);
+}
 
-setTimeout(function() {
-	updateCity(placesArray);
-}, 10000);
+function loadWeekly() {
+    setTimeout(function() {
+    	$("#content").append("<div class=\"ten-day\"><div id=\"10-DAY-FORECAST\" class=\"forecast-content\"></div></div>");
+        $("#10-DAY-FORECAST").html(weekly);
+        $('.forecast-day').velocity("fadeIn", {
+            stagger: 250
+        })
+    }, 1000);
 
-setTimeout(function() {
-    updateTime(timeArray);
-}, 1000);
+    setTimeout(function() {
+        $(".ten-day").velocity("fadeOut", {
+            stagger: 250
+        });
+
+        setTimeout(function() {
+            $(".ten-day").remove();
+        }, 2000);
+    }, 10000);
+}
+
 
 
 function updateWeatherUI(lat, lng) {
 	$.getJSON("https://api.forecast.io/forecast/80e7cbcf81c8314b610b924172cdfc23/" + lat + "," + lng, function( data ) {
 
+		// Initialize Sidebar
+		updateTemperature(data['currently']['temperature']);
+		initializeMap(lat, lng);
+
 		$("#CURRENT_FORECAST_ICON").html("<div class=\"icon " + getIconHolder(data['currently']['icon']) + "\"><i class=\"wi "
             + getIcon(data['currently']['icon']) + "\"></i></div>");
-			console.log(data['currently']);
-			$("#CURRENT_SUMMARY").html(data['currently']['summary']);
+		console.log(data['currently']);
+		$("#CURRENT_SUMMARY").html(data['currently']['summary']);
 
-            $("#CURRENT_TEMP").html(round5(data['currently']['temperature']));
-            $("#CURRENT_FEELS_LIKE_TEMP").html("feels like " + round5(data['currently']['apparentTemperature']) + "&degF");
-            $("#CURRENT_DEW_POINT").html(round5(data['currently']['dewPoint']) + "&degF");
-            $("#CURRENT_HUMIDITY").html(Math.round(data['currently']['humidity'] * 100) + " %");
-            $("#CURRENT_VISIBILITY").html(data['currently']['visibility'] + " mi");
-            $("#CURRENT_CLOUD_COVER").html(round5(data['currently']['cloudCover'] * 100) + "%");
-            $("#CURRENT_PRESSURE").html(Math.round((data['currently']['pressure'] * 0.0295301) * 100) / 100 + "\"");
+        $("#CURRENT_TEMP").html(round5(data['currently']['temperature']));
+        $("#CURRENT_FEELS_LIKE_TEMP").html("feels like " + round5(data['currently']['apparentTemperature']) + "&degF");
+        $("#CURRENT_DEW_POINT").html(round5(data['currently']['dewPoint']) + "&degF");
+        $("#CURRENT_HUMIDITY").html(Math.round(data['currently']['humidity'] * 100) + " %");
+        $("#CURRENT_VISIBILITY").html(data['currently']['visibility'] + " mi");
+        $("#CURRENT_CLOUD_COVER").html(round5(data['currently']['cloudCover'] * 100) + "%");
+        $("#CURRENT_PRESSURE").html(Math.round((data['currently']['pressure'] * 0.0295301) * 100) / 100 + "\"");
 
 
-            var days = [];
-            $.each( data['daily']['data'], function(i, item ) {
-             days.push(
-                 "<div class=forecast-day><h4 class=forecast-day-title>" + getDay(item.time) +
-                     "</h4><div class=\"day-icon " + getIconHolder(item.icon) + " wi-day\"><i class=\"wi " + getIcon(item.icon)
-                 + "\"></i></div><p>" + Math.round(item.apparentTemperatureMax) +
-                     "&deg; <small>F</small> / " + Math.round(item.apparentTemperatureMin) +
-                     "&deg; <small>F</small></p><p class=wind><span class=\"wi wi-windy\"></span>&nbsp;&nbsp; " +
-                     getWindDirection(item.windBearing) + " <small> at </small>" +
-                     Math.round(item.windSpeed) + " mph</p><p class=precip><span class=\"wi wi-sprinkles\"></span>&nbsp;&nbsp; " +
-                     round5(Math.round(item.precipProbability * 100))  + "%</p></div></div>"
-             );
-
-            });
-
-            updateTemperature(data['currently']['temperature']);
-
-            $("#10-DAY-FORECAST").html(days.join( "" ))
-            // FADE IN 10 DAY FORCAST AS A STAGGER
-            $('.forecast-day').velocity("fadeIn", {
-                stagger: 250
-            })
-            
-            $("body").css("background-image","url('" + getBackgroundImage(data['currently']['icon']) + "')");
-
-            initializeMap(lat, lng);
-    });
-
-	$.getJSON("http://api.myweather.today/v1/forecast/" + lat + "/" + lng, function( data ) {
-		var items = [];
-		$.each( data, function(i, item ) {
-			items.push(
-				"<div class=row><div class=day>" + item.day +
-					"</div><div class=description><p>" + item.forecast +
-					"</p></div><div class=clear-forecast-day></div></div>"
+        var days = [];
+        $.each( data['daily']['data'], function(i, item ) {
+			days.push(
+				"<div class=forecast-day><h4 class=forecast-day-title>" + getDay(item.time) +
+				"</h4><div class=\"day-icon " + getIconHolder(item.icon) + " wi-day\"><i class=\"wi " + getIcon(item.icon)
+				+ "\"></i></div><p>" + Math.round(item.apparentTemperatureMax) +
+				"&deg; <small>F</small> / " + Math.round(item.apparentTemperatureMin) +
+				"&deg; <small>F</small></p><p class=wind><span class=\"wi wi-windy\"></span>&nbsp;&nbsp; " +
+				getWindDirection(item.windBearing) + " <small> at </small>" +
+				Math.round(item.windSpeed) + " mph</p><p class=precip><span class=\"wi wi-sprinkles\"></span>&nbsp;&nbsp; " +
+				round5(Math.round(item.precipProbability * 100))  + "%</p></div></div>"
 			);
 
-		});
+        });
 
-		$("#TEXTUAL_FORECAST").html(items.join( "" ))
-		$("<div class=clear-div></div>").appendTo( "#TEXTUAL_FORECAST" );
-	});
+        weekly = days.join("");
+        
+    });
+
+	// $.getJSON("http://api.myweather.today/v1/forecast/" + lat + "/" + lng, function( data ) {
+	// 	var items = [];
+	// 	$.each( data, function(i, item ) {
+	// 		items.push(
+	// 			"<div class=row><div class=day>" + item.day +
+	// 				"</div><div class=description><p>" + item.forecast +
+	// 				"</p></div><div class=clear-forecast-day></div></div>"
+	// 		);
+
+	// 	});
+
+	// 	$("#TEXTUAL_FORECAST").html(items.join( "" ))
+	// 	$("<div class=clear-div></div>").appendTo( "#TEXTUAL_FORECAST" );
+	// });
 }
 
 function updateTemperature(value) {
 	var value = Math.round(value * 100) / 10000;
-
 
 	$('.temperature.circle').circleProgress({
 	    arcCoef: 0.7,
@@ -155,6 +187,9 @@ function updateTemperature(value) {
 	    $(this).find('strong').text(Math.round(parseFloat(stepValue).toFixed(2) * 100) + unescape('%B0'));
 	});
 }
+
+
+
 
 function getDay(timestamp) {
 	var options = {
@@ -282,8 +317,7 @@ function getBackgroundImage(icon) {
     }
 }
 
-function round5(x)
-{
+function round5(x) {
 	return (x % 5) >= 2.5 ? parseInt(x / 5) * 5 + 5 : parseInt(x / 5) * 5;
 }
 
@@ -391,6 +425,7 @@ function initializeMap(locationLat, locationLon) {
 
     var marker = new google.maps.Marker({
 	    position: myLatLng,
+	    animation: google.maps.Animation.DROP,
 	    map: map
 	});
 
@@ -398,6 +433,11 @@ function initializeMap(locationLat, locationLon) {
     map.setMapTypeId("light");
 
     Radar.loadRadarOverlay();
+
+    // setTimeout(function() {
+    //     var myLatLng2 = new google.maps.LatLng("42.0208", "-80.3380");
+    //     map.panTo(myLatLng2);
+    // }, 4000);
 }
 
 var Radar = {
