@@ -32,7 +32,6 @@ h1.location_title {
 }
 
 .wi {
-	padding-top: 7px;
 	font-weight: 600 !important;
 }
 
@@ -43,6 +42,28 @@ h1.location_title {
 	text-align: center;
 	padding-top: 0px;
 }
+
+.weather-icon span {
+	/*font-size: 2.5em;*/
+	color: #fff;
+	position: relative;
+	top: 50%;
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+}
+
+.wi-showers {
+	margin-top: -4px !important;
+}
+
+/*.day-icon {
+	margin: 20px auto;
+	border-radius: 50%;
+	width: 85px;
+	height: 85px;
+	text-align: center;
+}*/
 
 .head_text {
 	background-color: rgba(0,0,0,0.4);
@@ -203,6 +224,9 @@ h1.location_title {
 .forecast-day {
 	display: none;
 }
+
+/* icons */
+
 
 /*.head_text {
 	width: 229px;
