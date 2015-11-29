@@ -121,7 +121,8 @@ function loadWeekly() {
 function updateWeatherUI(lat, lng) {
 	$.getJSON("https://api.forecast.io/forecast/80e7cbcf81c8314b610b924172cdfc23/" + lat + "," + lng, function( data ) {
 
-        $("WEATHER_ICON_HEAD").html("<span class=\"weather-icon " + getIconHolder(data['currently']['icon']) + "\"><span class=\"wi " +  getIcon(data['currently']['icon']) + "\"></span></span>");
+        $("#WEATHER_ICON_HEAD").html("<span class=\"weather-icon " + getIconHolder(data['currently']['icon']) + "\"><span class=\"wi " +  getIcon(data['currently']['icon']) + "\"></span></span>");
+        $("body").css("background-image","url('" + getBackgroundImage(data['currently']['icon']) + "')");
 
 		// Initialize Sidebar
 		updateTemperature(data['currently']['temperature']);
