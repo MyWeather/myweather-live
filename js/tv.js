@@ -8,6 +8,10 @@ function initialize() {
 		updateCity(placesArray);
 		displayWeekly();
 
+        setTimeout(function() {
+            var geo = placesArray[x][1].split(',');
+            displaySoon(geo[0], geo[1]);
+        }, 20000);
 
         setTimeout(function() {
             $("#map").velocity("fadeIn", {
@@ -114,6 +118,16 @@ function loadWeekly() {
             $(".ten-day").remove();
         }, 2000);
     }, 10000);
+}
+
+function displaySoon(lat, lng) {
+    $.getJSON("http://api.myweather.today/v1/forecast/" + lat + "/" + lng, function( data ) {
+     console.log(data[0])
+
+     var response = "<div id=\"TEXTUAL\"><h3>" + data["day"] + "</h3><br><h5>" + data["forecast"] + "</h5></div>";
+
+     $("#content").append(response);
+    });
 }
 
 
